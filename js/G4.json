@@ -1,0 +1,35 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {"url": "data/G4_rank.csv"},
+    "width": 800,
+    "height": 500,
+    "layer": [
+      {
+        "mark": {"type": "line", "strokeWidth": 3},
+        "encoding": {
+          "x": {"field": "Year", "type": "ordinal"},
+          "y": {"field": "Rank", "type": "ordinal", "sort": "x"},
+          "color": {
+            "field": "Country Name",
+            "legend": null,
+            "scale": {"range": ["#000000"]}
+          }
+        }
+      },
+      {
+        "mark": {"type": "image", "width": 30, "height": 30},
+        "encoding": {
+          "x": {"field": "Year", "type": "ordinal"},
+          "y": {"field": "Rank", "type": "ordinal", "sort": "x"},
+          "url": {"field": "img", "type": "nominal"},
+          "size": {"field": "Total Food for Area", "type": "quantitative"},
+          "tooltip": [
+            {"field": "Country Name", "title": "Country"},
+            {"field": "Total Food for Area", "format": ".2f"},
+            {"field": "Rank"}
+          ]
+        }
+      }
+    ],
+    "config": {"font": "sans-serif"}
+  }

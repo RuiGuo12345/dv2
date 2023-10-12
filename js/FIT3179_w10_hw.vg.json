@@ -1,0 +1,33 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 800,
+    "height": 450,
+    "title": "Wheat and products in world (2013)",
+    "data": {"url": "data/grow_food.csv"},
+
+    "params": [
+        {
+            "name": "value_select",
+            "value": 1000,
+            "bind": {
+              "input": "range",
+              "min": 1000,
+              "max": 21000,
+              "step": 1000,
+              "name": "2013 Food production (in 1000 tonnes):  "
+        }
+    }
+    ],
+    "transform": [{"filter": "datum['per 1000 tonnes'] >= value_select"}],
+
+    "mark": "bar",
+    "encoding": {
+        "y":{"field":"Area", "sort": "-x", "title": "Country/Region"},
+        "x":{"field":"per 1000 tonnes", "type":"quantitative", "title": "Food production (in 1000 tonnes)"},
+        "tooltip": [
+            {"field": "Area", "type": "nominal", "title": "Country/Region"},
+            {"field": "per 1000 tonnes", "type": "quantitative", "title": "Food production"}
+        ]
+
+    }
+}

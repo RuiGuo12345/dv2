@@ -1,0 +1,86 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {"url": "data/total_food_feed_by_area_year.csv"},
+    "params": [
+      {
+        "name": "Year_selection",
+        "value": 2000,
+        "bind": {
+          "input": "range",
+          "min": 1961,
+          "max": 2013,
+          "step": 1,
+          "name": "Year:  "
+        }
+      }
+    ],
+    "width": 750,
+    "height": 400,
+    "projection": {"type": "equalEarth"},
+    "layer": [
+      {
+        "data": {
+          "url": "data/oceans.json",
+          "format": {"type": "topojson", "feature": "oceans"}
+        },
+        "mark": {"type": "geoshape", "stroke": "grey", "fill": "#8abdf7"}
+      },
+      {
+        "transform": [
+          {
+            "calculate": "'unavailable data in ' + datum.properties.name",
+            "as": "note"
+          }
+        ],
+        "data": {
+          "url": "data/world_map.json",
+          "format": {"type": "topojson", "feature": "countries"}
+        },
+        "mark": {"type": "geoshape", "stroke": "grey", "fill": "lightgrey"},
+        "encoding": {"tooltip": {"field": "note"}}
+      },
+      {
+        "transform": [
+          {
+            "lookup": "Area",
+            "from": {
+              "data": {
+                "url": "data/world_map.json",
+                "format": {"type": "topojson", "feature": "countries"}
+              },
+              "key": "properties.name"
+            },
+            "as": "geo"
+          },
+          {"filter": "year(datum.Year) == Year_selection"}
+        ],
+        "mark": {"type": "geoshape", "stroke": "grey"},
+        "encoding": {
+          "shape": {"field": "geo", "type": "geojson"},
+          "color": {
+            "field": "Total Food for Area",
+            "type": "quantitative",
+            "title": "Food production (in 1000 tons)",
+            "scale": {"domainMax": 500000, "scheme": "viridis", "reverse": true}
+          },
+          "tooltip": [
+            {"field": "Area", "type": "nominal", "title": "Country/Region"},
+            {"field": "Year", "type": "ordinal", "title": "Year"},
+            {
+              "field": "Total Food for Area",
+              "type": "quantitative",
+              "title": "Total Food production (in 1000 tons)",
+              "format": ","
+            }
+          ]
+        }
+      },
+      {
+        "data": {
+          "url": "data/graticules.json",
+          "format": {"type": "topojson", "feature": "graticules"}
+        },
+        "mark": {"type": "geoshape", "stroke": "white", "fill": null}
+      }
+    ]
+  }
